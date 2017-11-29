@@ -25,14 +25,11 @@ class Talker(Thread):
                   self.s.close()
                   break
                else:
-                  self.s.send(str(m))
-              
+                  self.s.send(str(m))              
          except socket.error:
-               time.sleep(5)
-               print "sleeping"
-   def stop(self):
-      self.s.close()
- 
+            time.sleep(5)
+            print "sleeping"
+
 if __name__ == '__main__':
    t = Talker()
    t.start()
