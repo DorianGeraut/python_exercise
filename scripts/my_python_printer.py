@@ -26,7 +26,7 @@ class Connexion(Thread):
       except KeyboardInterrupt:
          print "connection recieved Keyboard Interrupt!"
       
-      print "connection ended"
+      print "connection ended ",self.conn_sock.fileno()
       self.conn_sock.close()
 
 class Printer(object):
