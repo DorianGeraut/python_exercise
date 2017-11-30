@@ -21,15 +21,8 @@ class Talker(Thread):
          try:
             self.s.connect(('localhost', 55000))
             while 1:
-               try:
-                  m = Message.Message(raw_input("message:"))
-               except:
-                  print "I'm here!"
-                  self.s.send(pickle.dumps(m.set_f_end()))
-                  self.s.close()
-                  break
-               else:
-                  self.s.send(pickle.dumps(m))              
+               m = Message.Message(raw_input("message:"))
+               self.s.send(pickle.dumps(m))              
          except socket.error:
             time.sleep(1)
 
