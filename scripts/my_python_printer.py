@@ -3,6 +3,8 @@ import sys
 import socket
 import signal
 from threading import Thread, current_thread
+import Message
+import pickle
 
 class Connexion(Thread):
    
@@ -10,19 +12,20 @@ class Connexion(Thread):
       self.conn_sock=conn_sock
       Thread.__init__(self)
 
-
    def run(self):
       print "connection running"
       while 1:
       #Wait for a message from client
          buff = self.conn_sock.recv(1024)
-         if len(buff) > 0:
-            if buff=="CLOSE_CONNECTION":
-               break
-            else:
-               print buff
-   
-      
+         try:
+            message = pickle.loads(buff)
+            if len(buff) > 0:
+               if message.get_f_end() == True:
+                  break
+               else:
+                  print message.m
+         except EOFError:
+            continue
       print "connection ended ",self.conn_sock.fileno()
       self.conn_sock.close()
 
@@ -31,8 +34,7 @@ class Connexion(Thread):
 
 class Printer(object):
 
-   def __init__(self):
-   
+   def __init__(self):   
       print "************ Printer ************"
       self.connections_ids = []
       self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -1,12 +1,15 @@
 import sys
 import socket
 import time
+import Message
+import pickle
 from threading import Thread, Event
+
+
 
 class Talker(Thread):
    
-   def __init__(self):
-      
+   def __init__(self):      
       print "************ Talker ************"
       self.event = Event()
       self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -19,17 +22,21 @@ class Talker(Thread):
             self.s.connect(('localhost', 55000))
             while 1:
                try:
-                  m = raw_input("message:")
+                  m = Message.Message(raw_input("message:"))
                except:
-                  self.s.send("CLOSE_CONNECTION")
+                  print "I'm here!"
+                  self.s.send(pickle.dumps(m.set_f_end()))
                   self.s.close()
                   break
                else:
-                  self.s.send(str(m))              
+                  self.s.send(pickle.dumps(m))              
          except socket.error:
             time.sleep(1)
 
    def stop(self):
+      m = Message.Message("")
+      m.set_f_end()
+      self.s.send(pickle.dumps(m))
       self.s.close()
       self.event.set()
 
@@ -41,4 +48,4 @@ if __name__ == '__main__':
          time.sleep(1)
    except KeyboardInterrupt:
       t.stop()
-      exit(0)
+      sys.exit()
