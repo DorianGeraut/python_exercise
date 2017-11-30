@@ -5,10 +5,16 @@ from threading import Thread, Event
 
 class Message(object):
 
-   def __init__(self,m):
-      self.m = m
+   def __init__(self,*args):
+      if len(args) >= 1:
+         self.m = args[0]
+      else:
+         self.m = None
+      if len (args) >= 2:
+         self.f_end = args[1]
+      else:
+         self.f_end = False
       self.t = time.time()
-      self.f_end = False
 
    def __getitem__(self):
       return (self.m, self.t, self.f_end)

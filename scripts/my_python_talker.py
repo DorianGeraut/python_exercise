@@ -27,7 +27,7 @@ class Talker(Thread):
             time.sleep(1)
 
    def stop(self):
-      m = Message.Message("")
+      m = Message.Message()
       m.set_f_end()
       self.s.send(pickle.dumps(m))
       self.s.close()
